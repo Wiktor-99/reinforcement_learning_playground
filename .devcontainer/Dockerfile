@@ -21,6 +21,7 @@ RUN sudo wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrin
     ros-$ROS_DISTRO-ros-gz \
     ros-$ROS_DISTRO-ros-gz-bridge \
     ros-$ROS_DISTRO-rmw-cyclonedds-cpp \
+    ros-$ROS_DISTRO-gz-ros2-control \
     ros-$ROS_DISTRO-ros2-controllers && \
     apt-get autoremove -y && \
     apt-get clean && \
