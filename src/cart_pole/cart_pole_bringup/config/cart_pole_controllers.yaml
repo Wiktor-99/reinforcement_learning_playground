@@ -1,0 +1,14 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    velocity_controllers:
+      type: velocity_controllers/JointGroupVelocityController
+
+velocity_controllers:
+  ros__parameters:
+    joints:
+      - slider_to_cart
