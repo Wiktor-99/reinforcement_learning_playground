@@ -32,19 +32,17 @@ def generate_launch_description():
         ],
     )
 
-    # robot_controllers = os.path.join(get_package_share_directory('cart_pole_bringup'), 'config', 'cart_pole_controllers.yaml')
-
     joint_state_broadcaster_spawner = ExecuteProcess(
         name="joint_state_broadcaster_spawner",
         cmd=["ros2", "control", "load_controller", "--set-state", "active", "joint_state_broadcaster"],
-        shell=False,
+        shell=True,
         output="screen",
     )
 
     velocity_controller_spawner = ExecuteProcess(
         name="velocity_controller_spawner",
         cmd=[ "ros2", "control", "load_controller", "--set-state", "active", "velocity_controllers"],
-        shell=False,
+        shell=True,
         output="screen",
     )
 
