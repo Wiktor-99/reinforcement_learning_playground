@@ -39,9 +39,9 @@ def generate_launch_description():
         output="screen",
     )
 
-    velocity_controller_spawner = ExecuteProcess(
+    effort_controller_spawner = ExecuteProcess(
         name="velocity_controller_spawner",
-        cmd=[ "ros2", "control", "load_controller", "--set-state", "active", "velocity_controllers"],
+        cmd=[ "ros2", "control", "load_controller", "--set-state", "active", "effort_controller"],
         shell=True,
         output="screen",
     )
@@ -51,5 +51,5 @@ def generate_launch_description():
         gazebo_spawn_robot,
         robot_state_publisher,
         joint_state_broadcaster_spawner,
-        velocity_controller_spawner
+        effort_controller_spawner
     ])
