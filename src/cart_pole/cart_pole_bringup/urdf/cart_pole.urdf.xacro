@@ -86,7 +86,7 @@
 
   <joint name="pole_holder_to_pole_holder2" type="revolute">
     <axis xyz="0 1 0"/>
-    <origin xyz="0 0.075 0.05" rpy="0 0 0" />
+    <origin xyz="0 0.075 0.05" rpy="0 0.001 0" />
     <parent link="pole_holder"/>
     <child link="pole_holder2"/>
     <limit effort="10" lower="-1.57" upper="1.57" velocity="15"/>
@@ -95,17 +95,17 @@
   <link name="pole">
     <visual>
       <geometry>
-        <cylinder radius="0.05" length="0.5"/>
+        <cylinder radius="0.05" length="0.75"/>
       </geometry>
       <origin xyz="0 0 0"/>
     </visual>
     <collision>
       <geometry>
-        <cylinder radius="0.05" length="0.5"/>
+        <cylinder radius="0.05" length="0.75"/>
       </geometry>
       <origin xyz="0 0 0"/>
     </collision>
-    <xacro:cylinder_inertia m="5" r="0.05" h="0.5" />
+    <xacro:cylinder_inertia m="5" r="0.05" h="0.75" />
   </link>
 
   <joint name="pole_holder_to_pole" type="fixed">
