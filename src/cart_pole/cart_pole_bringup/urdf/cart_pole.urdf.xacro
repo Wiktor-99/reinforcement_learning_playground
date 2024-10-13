@@ -8,7 +8,6 @@
     </inertial>
   </xacro:macro>
 
-
   <link name="world"/>
   <link name="slideBar">
     <visual>
@@ -84,7 +83,7 @@
     <origin xyz="0.0 0.075 0.05" rpy="0 0 0" />
     <parent link="pole_holder"/>
     <child link="pole_holder2"/>
-    <limit effort="10.0" lower="-5.0" upper="5.0" velocity="15.0"/>
+    <limit effort="10.0" lower="-1.57" upper="1.57" velocity="15.0"/>
   </joint>
 
   <link name="pole">
