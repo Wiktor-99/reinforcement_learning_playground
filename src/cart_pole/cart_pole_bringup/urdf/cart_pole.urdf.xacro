@@ -12,7 +12,7 @@
   <link name="slideBar">
     <visual>
       <geometry>
-        <box size="30 0.05 0.05"/>
+        <box size="10 0.05 0.05"/>
       </geometry>
       <origin xyz="0 0 1"/>
     </visual>
@@ -28,6 +28,12 @@
       </geometry>
       <origin xyz="0 0 0"/>
     </visual>
+    <collision>
+      <geometry>
+        <box size="0.5 0.5 0.2"/>
+      </geometry>
+      <origin xyz="0 0 0"/>
+    </collision>
     <inertial>
       <mass value="1"/>
       <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
@@ -111,18 +117,18 @@
   <link name="leg1">
     <visual>
       <geometry>
-        <cylinder radius="0.2" length="1.0"/>
+        <cylinder radius="0.2" length="2.0"/>
       </geometry>
       <origin xyz="0 0 0"/>
     </visual>
     <collision>
       <geometry>
-        <cylinder radius="0.2" length="1.0"/>
+        <cylinder radius="0.2" length="2.0"/>
       </geometry>
       <origin xyz="0 0 0"/>
     </collision>
     <inertial>
-      <mass value="1"/>
+      <mass value="2"/>
       <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
     </inertial>
   </link>
@@ -130,18 +136,18 @@
   <link name="leg2">
     <visual>
       <geometry>
-        <cylinder radius="0.2" length="1.0"/>
+        <cylinder radius="0.2" length="2.0"/>
       </geometry>
       <origin xyz="0 0 0"/>
     </visual>
     <collision>
       <geometry>
-        <cylinder radius="0.2" length="1.0"/>
+        <cylinder radius="0.2" length="2.0"/>
       </geometry>
       <origin xyz="0 0 0"/>
     </collision>
     <inertial>
-      <mass value="1"/>
+      <mass value="2"/>
       <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
     </inertial>
   </link>
@@ -155,18 +161,18 @@
     <origin xyz="0.0 0.0 1.0"/>
     <parent link="slideBar"/>
     <child link="cart"/>
-    <limit effort="1000.0" lower="-15" upper="15" velocity="30"/>
-    <dynamics damping="0.0" friction="0.0"/>
+    <limit effort="10.0" lower="-5" upper="5" velocity="30"/>
+    <dynamics damping="0.1" friction="0.1"/>
   </joint>
 
   <joint name="slider_to_leg1" type="fixed">
-    <origin xyz="-15.0 0.0 0.5"/>
+    <origin xyz="-5 0.0 1"/>
     <parent link="slideBar"/>
     <child link="leg1"/>
   </joint>
 
   <joint name="slider_to_leg2" type="fixed">
-    <origin xyz="15 0.0 0.5"/>
+    <origin xyz="5 0.0 1"/>
     <parent link="slideBar"/>
     <child link="leg2"/>
   </joint>
@@ -214,5 +220,6 @@
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(find cart_pole_bringup)/config/cart_pole_controllers.yaml</parameters>
     </plugin>
+    <self_collide>true</self_collide>
   </gazebo>
 </robot>
