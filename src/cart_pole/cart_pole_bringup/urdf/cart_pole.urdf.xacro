@@ -3,178 +3,181 @@
   <xacro:macro name="cylinder_inertia" params="m r h">
     <inertial>
       <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
-      <mass value="${m}"/>
-      <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy = "0" ixz = "0" iyy="${(m/12) * (3*r*r + h*h)}" iyz = "0" izz="${(m/2) * (r*r)}"/>
+      <mass value="${m}" />
+      <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy = "0" ixz = "0" iyy="${(m/12) * (3*r*r + h*h)}" iyz = "0" izz="${(m/2) * (r*r)}" />
     </inertial>
   </xacro:macro>
 
-  <link name="world"/>
+  <link name="world" />
   <link name="slideBar">
     <visual>
+      <origin xyz="0 0 1" />
       <geometry>
-        <box size="10 0.05 0.05"/>
+        <box size="10 0.05 0.05" />
       </geometry>
-      <origin xyz="0 0 1"/>
     </visual>
     <inertial>
-      <mass value="100"/>
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+      <mass value="100" />
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
     </inertial>
   </link>
+
   <link name="cart">
     <visual>
+      <origin xyz="0 0 0" />
       <geometry>
-        <box size="0.5 0.5 0.2"/>
+        <box size="0.5 0.5 0.2" />
       </geometry>
-      <origin xyz="0 0 0"/>
     </visual>
     <collision>
+      <origin xyz="0 0 0" />
       <geometry>
-        <box size="0.5 0.5 0.2"/>
+        <box size="0.5 0.5 0.2" />
       </geometry>
-      <origin xyz="0 0 0"/>
     </collision>
     <inertial>
-      <mass value="1"/>
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
     </inertial>
   </link>
+
+  <link name="pole_holder_base">
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <box size="0.1 0.1 0.2" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <box size="0.1 0.1 0.2" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+    </inertial>
+  </link>
+
+  <joint name="cart_to_pole_holder_base" type="fixed">
+    <origin xyz="0 0 0.2" />
+    <parent link="cart" />
+    <child link="pole_holder" />
+  </joint>
 
   <link name="pole_holder">
     <visual>
-      <origin xyz="0 0 0"/>
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
       <geometry>
-        <box size="0.1 0.1 0.2"/>
+        <cylinder radius="0.05" length="0.05" />
       </geometry>
     </visual>
     <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
       <geometry>
-        <box size="0.1 0.1 0.2"/>
+        <cylinder radius="0.05" length="0.05" />
       </geometry>
-      <origin xyz="0 0 0"/>
     </collision>
     <inertial>
-      <mass value="1"/>
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-    </inertial>
-  </link>
-
-  <joint name="cart_to_pole_holder" type="fixed">
-    <origin xyz="0 0 0.2"/>
-    <parent link="cart"/>
-    <child link="pole_holder"/>
-  </joint>
-
-  <link name="pole_holder2">
-    <visual>
-      <geometry>
-        <cylinder radius="0.05" length="0.05"/>
-      </geometry>
-      <origin xyz="0 0 0" rpy="1.57 0 0"/>
-    </visual>
-    <collision>
-      <geometry>
-        <cylinder radius="0.05" length="0.05"/>
-      </geometry>
-      <origin xyz="0 0 0" rpy="1.57 0 0"/>
-    </collision>
-    <inertial>
-      <mass value="1.5"/>
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+      <mass value="1.5" />
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
     </inertial>
   </link>
 
   <joint name="pole_holder_to_pole_holder2" type="revolute">
-    <axis xyz="0 1 0"/>
+    <axis xyz="0 1 0" />
     <origin xyz="0 0.075 0.05" rpy="0 0.001 0" />
-    <parent link="pole_holder"/>
-    <child link="pole_holder2"/>
-    <limit effort="1000" lower="-1.57" upper="1.57" velocity="100"/>
+    <parent link="pole_holder_base" />
+    <child link="pole_holder" />
+    <limit effort="1000" lower="-1.57" upper="1.57" velocity="100" />
   </joint>
 
   <link name="pole">
     <visual>
+      <origin xyz="0 0 0" />
       <geometry>
-        <cylinder radius="0.05" length="0.75"/>
+        <cylinder radius="0.05" length="0.75" />
       </geometry>
-      <origin xyz="0 0 0"/>
     </visual>
     <collision>
+      <origin xyz="0 0 0" />
       <geometry>
-        <cylinder radius="0.05" length="0.75"/>
+        <cylinder radius="0.05" length="0.75" />
       </geometry>
-      <origin xyz="0 0 0"/>
     </collision>
     <xacro:cylinder_inertia m="5" r="0.05" h="0.75" />
   </link>
 
   <joint name="pole_holder_to_pole" type="fixed">
-    <origin xyz="0 0.075 0.15"/>
-    <parent link="pole_holder2"/>
-    <child link="pole"/>
+    <origin xyz="0 0.075 0.15" />
+    <parent link="pole_holder2" />
+    <child link="pole" />
   </joint>
 
   <link name="leg1">
     <visual>
+      <origin xyz="0 0 0" />
       <geometry>
-        <cylinder radius="0.2" length="2.0"/>
+        <cylinder radius="0.2" length="2.0" />
       </geometry>
-      <origin xyz="0 0 0"/>
     </visual>
     <collision>
+      <origin xyz="0 0 0" />
       <geometry>
-        <cylinder radius="0.2" length="2.0"/>
+        <cylinder radius="0.2" length="2.0" />
       </geometry>
-      <origin xyz="0 0 0"/>
     </collision>
     <inertial>
-      <mass value="2"/>
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+      <mass value="2" />
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
     </inertial>
   </link>
 
   <link name="leg2">
     <visual>
+      <origin xyz="0 0 0" />
       <geometry>
-        <cylinder radius="0.2" length="2.0"/>
+        <cylinder radius="0.2" length="2.0" />
       </geometry>
-      <origin xyz="0 0 0"/>
     </visual>
     <collision>
+      <origin xyz="0 0 0" />
       <geometry>
-        <cylinder radius="0.2" length="2.0"/>
+        <cylinder radius="0.2" length="2.0" />
       </geometry>
-      <origin xyz="0 0 0"/>
     </collision>
     <inertial>
-      <mass value="2"/>
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+      <mass value="2" />
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
     </inertial>
   </link>
+
   <joint name="world_to_base" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 1"/>
-    <parent link="world"/>
-    <child link="slideBar"/>
+    <origin rpy="0 0 0" xyz="0 0 1" />
+    <parent link="world" />
+    <child link="slideBar" />
   </joint>
+
   <joint name="slider_to_cart" type="prismatic">
-    <axis xyz="1 0 0"/>
-    <origin xyz="0 0 1.0"/>
-    <parent link="slideBar"/>
-    <child link="cart"/>
-    <limit effort="10.0" lower="-5" upper="5" velocity="30"/>
-    <dynamics damping="0.1" friction="0.1"/>
+    <axis xyz="1 0 0" />
+    <origin xyz="0 0 1.0" />
+    <parent link="slideBar" />
+    <child link="cart" />
+    <limit effort="10.0" lower="-5" upper="5" velocity="30" />
+    <dynamics damping="0.1" friction="0.1" />
   </joint>
 
   <joint name="slider_to_leg1" type="fixed">
-    <origin xyz="-5 0 1"/>
-    <parent link="slideBar"/>
-    <child link="leg1"/>
+    <origin xyz="-5 0 1" />
+    <parent link="slideBar" />
+    <child link="leg1" />
   </joint>
 
   <joint name="slider_to_leg2" type="fixed">
-    <origin xyz="5 0 1"/>
-    <parent link="slideBar"/>
-    <child link="leg2"/>
+    <origin xyz="5 0 1" />
+    <parent link="slideBar" />
+    <child link="leg2" />
   </joint>
 
   <gazebo reference="slideBar">
@@ -206,12 +209,12 @@
         <param name="min">-1000</param>
         <param name="max">1000</param>
       </command_interface>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-      <state_interface name="position"/>
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+      <state_interface name="position" />
     </joint>
     <joint name="pole_holder_to_pole">
-      <state_interface name="velocity"/>
+      <state_interface name="velocity" />
       <state_interface name="position">
           <param name="initial_value">0.001</param>
         </state_interface>
