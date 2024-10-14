@@ -2,10 +2,10 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>cart_pole_bringup</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="wiktorbajor1@gmail.com">ros</maintainer>
-  <license>TODO: License declaration</license>
+  <version>1.0.0</version>
+  <description>The cart pole description and simulator launcher.</description>
+  <maintainer email="wiktorbajor1@gmail.com">Wiktor Bajor</maintainer>
+  <license>Apache 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
