@@ -1,5 +1,5 @@
+FROM althack/ros2:iron-full
 ARG ROS_DISTRO=iron
-FROM althack/ros2:$ROS_DISTRO-full
 ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
