@@ -1,12 +1,6 @@
 <?xml version="1.0" ?>
 <robot name="cartopole" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:macro name="cylinder_inertia" params="m r h">
-    <inertial>
-      <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
-      <mass value="${m}" />
-      <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy = "0" ixz = "0" iyy="${(m/12) * (3*r*r + h*h)}" iyz = "0" izz="${(m/2) * (r*r)}" />
-    </inertial>
-  </xacro:macro>
+  <xacro:include filename="$(find cart_pole_bringup)/urdf/macros.urdf.xacro" />
 
   <link name="world" />
   <link name="slideBar">
@@ -63,7 +57,7 @@
   <joint name="cart_to_pole_holder_base" type="fixed">
     <origin xyz="0 0 0.2" />
     <parent link="cart" />
-    <child link="pole_holder" />
+    <child link="pole_holder_base" />
   </joint>
 
   <link name="pole_holder">
@@ -85,7 +79,7 @@
     </inertial>
   </link>
 
-  <joint name="pole_holder_to_pole_holder2" type="revolute">
+  <joint name="pole_holder_base_to_pole_holder" type="revolute">
     <axis xyz="0 1 0" />
     <origin xyz="0 0.075 0.05" rpy="0 0.001 0" />
     <parent link="pole_holder_base" />
@@ -111,7 +105,7 @@
 
   <joint name="pole_holder_to_pole" type="fixed">
     <origin xyz="0 0.075 0.15" />
-    <parent link="pole_holder2" />
+    <parent link="pole_holder" />
     <child link="pole" />
   </joint>
 
