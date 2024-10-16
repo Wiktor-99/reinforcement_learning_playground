@@ -25,10 +25,7 @@
         <box size="0.5 0.5 0.2" />
       </geometry>
     </collision>
-    <inertial>
-      <mass value="1" />
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
-    </inertial>
+    <xacro:box_inertia m="1" w="0.5" h="0.2" d="0.5" />
   </link>
 
   <link name="pole_holder_base">
@@ -44,10 +41,7 @@
         <box size="0.1 0.1 0.2" />
       </geometry>
     </collision>
-    <inertial>
-      <mass value="1" />
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
-    </inertial>
+   <xacro:box_inertia m="0.5" w="0.1" h="0.2" d="0.1" />
   </link>
 
   <joint name="cart_to_pole_holder_base" type="fixed">
