@@ -73,7 +73,7 @@
         <cylinder radius="0.05" length="0.05" />
       </geometry>
     </collision>
-    <xacro:cylinder_inertia m="1.5" r="0.05" h="0.0.5" />
+    <xacro:cylinder_inertia m="1" r="0.05" h="0.05" />
   </link>
 
   <joint name="pole_holder_base_to_pole_holder" type="revolute">
@@ -97,7 +97,7 @@
         <cylinder radius="0.05" length="0.75" />
       </geometry>
     </collision>
-    <xacro:cylinder_inertia m="5" r="0.05" h="0.75" />
+    <xacro:cylinder_inertia m="2" r="0.05" h="0.75" />
   </link>
 
   <joint name="pole_holder_to_pole" type="fixed">
