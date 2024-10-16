@@ -155,16 +155,6 @@
     <child link="right_limitter" />
   </joint>
 
-  <gazebo reference="slide_bar">
-    <visual>
-      <material>
-        <ambient>0 0.8 0 1</ambient>
-        <diffuse>0 0.8 0 1</diffuse>
-        <specular>0 0.8 0 1</specular>
-      </material>
-    </visual>
-  </gazebo>
-
   <gazebo reference="cart">
     <visual>
       <material>
