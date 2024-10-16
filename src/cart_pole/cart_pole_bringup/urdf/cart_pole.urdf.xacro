@@ -73,10 +73,7 @@
         <cylinder radius="0.05" length="0.05" />
       </geometry>
     </collision>
-    <inertial>
-      <mass value="1.5" />
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
-    </inertial>
+    <xacro:cylinder_inertia m="1.5" r="0.05" h="0.0.5" />
   </link>
 
   <joint name="pole_holder_base_to_pole_holder" type="revolute">
@@ -122,10 +119,7 @@
         <cylinder radius="0.2" length="2.0" />
       </geometry>
     </collision>
-    <inertial>
-      <mass value="2" />
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
-    </inertial>
+    <xacro:cylinder_inertia m="2" r="0.2" h="2.0" />
   </link>
 
   <link name="leg2">
@@ -141,10 +135,7 @@
         <cylinder radius="0.2" length="2.0" />
       </geometry>
     </collision>
-    <inertial>
-      <mass value="2" />
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
-    </inertial>
+    <xacro:cylinder_inertia m="2" r="0.2" h="2.0" />
   </link>
 
   <joint name="world_to_base" type="fixed">
