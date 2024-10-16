@@ -106,7 +106,7 @@
     <child link="pole" />
   </joint>
 
-  <link name="leg1">
+  <link name="left_limitter">
     <visual>
       <origin xyz="0 0 0" />
       <geometry>
@@ -122,7 +122,7 @@
     <xacro:cylinder_inertia m="2" r="0.2" h="2.0" />
   </link>
 
-  <link name="leg2">
+  <link name="right_limitter">
     <visual>
       <origin xyz="0 0 0" />
       <geometry>
@@ -146,23 +146,23 @@
 
   <joint name="slider_to_cart" type="prismatic">
     <axis xyz="1 0 0" />
-    <origin xyz="0 0 1.0" />
+    <origin xyz="0 0 1" />
     <parent link="slideBar" />
     <child link="cart" />
-    <limit effort="10.0" lower="-5" upper="5" velocity="30" />
+    <limit effort="10" lower="-5" upper="5" velocity="30" />
     <dynamics damping="0.1" friction="0.1" />
   </joint>
 
-  <joint name="slider_to_leg1" type="fixed">
+  <joint name="slider_to_left_limitter" type="fixed">
     <origin xyz="-5 0 1" />
     <parent link="slideBar" />
-    <child link="leg1" />
+    <child link="left_limitter" />
   </joint>
 
-  <joint name="slider_to_leg2" type="fixed">
+  <joint name="slider_to_right_limitter" type="fixed">
     <origin xyz="5 0 1" />
     <parent link="slideBar" />
-    <child link="leg2" />
+    <child link="right_limitter" />
   </joint>
 
   <gazebo reference="slideBar">
