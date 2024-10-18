@@ -35,28 +35,6 @@
     <xacro:box_inertia m="1" w="0.5" h="0.2" d="0.5" />
   </link>
 
-  <link name="pole_holder_base">
-    <visual>
-      <origin xyz="0 0 0" />
-      <geometry>
-        <box size="0.1 0.1 0.2" />
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0" />
-      <geometry>
-        <box size="0.1 0.1 0.2" />
-      </geometry>
-    </collision>
-   <xacro:box_inertia m="0.5" w="0.1" h="0.2" d="0.1" />
-  </link>
-
-  <joint name="cart_to_pole_holder_base" type="fixed">
-    <origin xyz="0 0 0.2" />
-    <parent link="cart" />
-    <child link="pole_holder_base" />
-  </joint>
-
   <link name="pole_holder">
     <visual>
       <origin xyz="0 0 0" rpy="1.57 0 0" />
@@ -75,8 +53,8 @@
 
   <joint name="pole_holder_base_to_pole_holder" type="revolute">
     <axis xyz="0 1 0" />
-    <origin xyz="0 0.075 0.05" rpy="0 0.001 0" />
-    <parent link="pole_holder_base" />
+    <origin xyz="0 0.28 0.05" rpy="0 0.001 0" />
+    <parent link="cart" />
     <child link="pole_holder" />
     <limit effort="1000" lower="-1.57" upper="1.57" velocity="100" />
   </joint>
@@ -98,7 +76,7 @@
   </link>
 
   <joint name="pole_holder_to_pole" type="fixed">
-    <origin xyz="0 0.075 0.15" />
+    <origin xyz="0 0.075 0.35" />
     <parent link="pole_holder" />
     <child link="pole" />
   </joint>
