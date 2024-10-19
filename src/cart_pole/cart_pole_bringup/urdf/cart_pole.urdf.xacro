@@ -118,7 +118,6 @@
       <state_interface name="position">
           <param name="initial_value">0.001</param>
         </state_interface>
-
     </joint>
   </ros2_control>
 
@@ -126,6 +125,5 @@
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(find cart_pole_bringup)/config/cart_pole_controllers.yaml</parameters>
     </plugin>
-    <self_collide>true</self_collide>
   </gazebo>
 </robot>
