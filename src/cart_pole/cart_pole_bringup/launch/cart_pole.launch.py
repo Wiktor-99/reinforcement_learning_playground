@@ -16,7 +16,7 @@ def generate_launch_description():
         package="ros_gz_sim",
         executable="create",
         name="spawn_cart_pole",
-        arguments=["-name", "spawn_cart_pole", "-topic", "robot_description"],
+        arguments=["-name", "cart_pole", "-topic", "robot_description"],
         output="screen",
     )
 
