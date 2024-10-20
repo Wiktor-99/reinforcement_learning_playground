@@ -105,25 +105,4 @@
       </material>
     </visual>
   </gazebo>
-
-  <ros2_control name="GazeboSimSystem" type="system">
-    <hardware>
-      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-    </hardware>
-    <joint name="slider_to_cart">
-      <command_interface name="effort" />
-      <state_interface name="effort" />
-    </joint>
-    <joint name="pole_holder_base_to_pole_holder">
-      <state_interface name="position">
-          <param name="initial_value">0.001</param>
-        </state_interface>
-    </joint>
-  </ros2_control>
-
-  <gazebo>
-    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>$(find cart_pole_bringup)/config/cart_pole_controllers.yaml</parameters>
-    </plugin>
-  </gazebo>
 </robot>

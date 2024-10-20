@@ -32,24 +32,8 @@ def generate_launch_description():
         ],
     )
 
-    joint_state_broadcaster_spawner = ExecuteProcess(
-        name="joint_state_broadcaster_spawner",
-        cmd=["ros2", "control", "load_controller", "--set-state", "active", "joint_state_broadcaster"],
-        shell=True,
-        output="screen",
-    )
-
-    effort_controller_spawner = ExecuteProcess(
-        name="velocity_controller_spawner",
-        cmd=[ "ros2", "control", "load_controller", "--set-state", "active", "effort_controller"],
-        shell=True,
-        output="screen",
-    )
-
     return LaunchDescription([
         gazebo,
         gazebo_spawn_robot,
-        robot_state_publisher,
-        joint_state_broadcaster_spawner,
-        effort_controller_spawner
+        robot_state_publisher
     ])
