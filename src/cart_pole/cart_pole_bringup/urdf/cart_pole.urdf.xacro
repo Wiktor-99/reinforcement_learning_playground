@@ -104,5 +104,10 @@
         <specular>0 0 0.8 1</specular>
       </material>
     </visual>
+    <plugin filename="gz-sim-joint-controller-system" name="gz::sim::systems::JointController">
+      <joint_name>slider_to_cart</joint_name>
+      <use_force_commands>true</use_force_commands>
+
+    </plugin>
   </gazebo>
 </robot>
