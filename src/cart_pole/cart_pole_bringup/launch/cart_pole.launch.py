@@ -32,8 +32,18 @@ def generate_launch_description():
         ],
     )
 
+    bridge_config = os.path.join(get_package_share_directory('cart_pole_bringup'), 'config', 'gazebo_bridge.yaml')
+    gz_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        name="ign_bridge",
+        ros_arguments=["-p", f"config_file:={bridge_config}"],
+        output="screen",
+    )
+
     return LaunchDescription([
         gazebo,
         gazebo_spawn_robot,
-        robot_state_publisher
+        robot_state_publisher,
+        gz_bridge
     ])
