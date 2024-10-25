@@ -104,10 +104,16 @@
         <specular>0 0 0.8 1</specular>
       </material>
     </visual>
+  </gazebo>
+  <gazebo>
     <plugin filename="gz-sim-joint-controller-system" name="gz::sim::systems::JointController">
       <joint_name>slider_to_cart</joint_name>
       <use_force_commands>true</use_force_commands>
-
+    </plugin>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>joint_states</topic>
+      <joint_name>slider_to_cart</joint_name>
+      <joint_name>pole_holder_base_to_pole_holder</joint_name>
     </plugin>
   </gazebo>
 </robot>
