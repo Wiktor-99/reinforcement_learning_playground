@@ -1,5 +1,5 @@
-FROM althack/ros2:iron-full
-ARG ROS_DISTRO=iron
+FROM althack/ros2:jazzy-full
+ARG ROS_DISTRO=jazzy
 ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
@@ -17,8 +17,7 @@ RUN sudo wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrin
     apt-get update --fix-missing && \
     apt-get -y install \
     ros-$ROS_DISTRO-xacro \
-    ros-$ROS_DISTRO-ros-gzharmonic \
-    ros-$ROS_DISTRO-ros-gzharmonic-bridge \
+    ros-$ROS_DISTRO-ros-gz \
     ros-$ROS_DISTRO-rmw-cyclonedds-cpp && \
     apt-get autoremove -y && \
     apt-get clean && \
