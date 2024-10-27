@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<robot name="cartopole" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="cart_pole" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find cart_pole_bringup)/urdf/macros.urdf.xacro" />
 
   <link name="world" />
