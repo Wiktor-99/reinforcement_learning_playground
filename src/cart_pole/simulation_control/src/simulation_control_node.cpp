@@ -61,49 +61,43 @@ public:
 
   void delete_cart_pole()
   {
-    gz::transport::Node node;
-    gz::msgs::Entity req;
-    req.set_name(robot_to_remove_name_);
-    req.set_type(gz::msgs::Entity_Type_MODEL);
-    gz::msgs::Boolean rep;
-    bool result;
-
-    while(rclcpp::ok() and not node.Request(service_remove_, req, timeout_, rep, result))
-    {
-      RCLCPP_WARN(
-        this->get_logger(), "Waiting for service [%s] to become available ...", service_remove_.c_str());
-    }
+    gz::msgs::Entity robot_remove_request;
+    robot_remove_request.set_name(robot_name_);
+    robot_remove_request.set_type(gz::msgs::Entity_Type_MODEL);
+    execute_gazebo_request(robot_remove_request, service_remove_);
+    update_robot_name();
   }
 
   void create_cart_pole()
   {
-    gz::transport::Node node;
-    bool result;
-    gz::msgs::EntityFactory robot_spawn_req;
-    gz::msgs::Boolean rep;
-    robot_spawn_req.set_sdf(robot_description_);
-    robot_spawn_req.set_name(robot_name_);
+    gz::msgs::EntityFactory robot_spawn_request;
+    robot_spawn_request.set_sdf(robot_description_);
+    robot_spawn_request.set_name(robot_name_);
+    execute_gazebo_request(robot_spawn_request, service_create_);
+  }
 
-    while(rclcpp::ok() and not node.Request(service_create_, robot_spawn_req, timeout_, rep, result))
+  template<typename T>
+  void execute_gazebo_request(T request, const std::string& service_name)
+  {
+    gz::msgs::Boolean response;
+    bool result;
+    const unsigned int timeout{5000};
+    while(rclcpp::ok() and not node_.Request(service_name, request, timeout, response, result))
     {
       RCLCPP_WARN(
-        this->get_logger(), "Waiting for service [%s] to become available ...", service_create_.c_str());
+        this->get_logger(), "Waiting for service [%s] to become available ...", service_name.c_str());
     }
-    update_robot_name();
   }
 
   void update_robot_name()
   {
-    counter_ += 1;
-    robot_to_remove_name_ = robot_name_;
-    robot_name_ = std::string("cart_pole") + std::to_string(counter_);
+    robot_name_ = std::string("cart_pole") + std::to_string(++counter_);
   }
 
+  gz::transport::Node node_{};
   int counter_{};
-  std::string robot_to_remove_name_{"cart_pole"};
   std::string robot_name_{"cart_pole"};
   std::string robot_description_{};
-  const unsigned int timeout_{5000};
   const std::string service_create_{"/world/empty/create"};
   const std::string service_remove_{"/world/empty/remove"};
   rclcpp::Service<std_srvs::srv::Empty>::SharedPtr server_;
