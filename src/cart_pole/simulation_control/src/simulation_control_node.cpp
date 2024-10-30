@@ -46,34 +46,31 @@ public:
   {
     robot_description_ = *get_robot_description_from_topic();
     server_ = create_service<std_srvs::srv::Empty>("restart_sim_service", [&](
-      std_srvs::srv::Empty::Request::SharedPtr req,
-      std_srvs::srv::Empty::Response::SharedPtr resp)
+      std_srvs::srv::Empty::Request::SharedPtr,
+      std_srvs::srv::Empty::Response::SharedPtr)
       {
-        restart_sim(req, resp);
+        execute_gazebo_request(build_remove_request(), service_remove_);
+        robot_name_ = std::string("cart_pole") + std::to_string(++counter_);
+        execute_gazebo_request(build_create_request(), service_create_);
       });
   }
 
-  void restart_sim(std_srvs::srv::Empty::Request::SharedPtr, std_srvs::srv::Empty::Response::SharedPtr)
-  {
-    delete_cart_pole();
-    create_cart_pole();
-  }
-
-  void delete_cart_pole()
+  gz::msgs::Entity build_remove_request() const
   {
     gz::msgs::Entity robot_remove_request;
     robot_remove_request.set_name(robot_name_);
     robot_remove_request.set_type(gz::msgs::Entity_Type_MODEL);
-    execute_gazebo_request(robot_remove_request, service_remove_);
-    update_robot_name();
+
+    return robot_remove_request;
   }
 
-  void create_cart_pole()
+  gz::msgs::EntityFactory build_create_request() const
   {
     gz::msgs::EntityFactory robot_spawn_request;
     robot_spawn_request.set_sdf(robot_description_);
     robot_spawn_request.set_name(robot_name_);
-    execute_gazebo_request(robot_spawn_request, service_create_);
+
+    return robot_spawn_request;
   }
 
   template<typename T>
@@ -87,11 +84,6 @@ public:
       RCLCPP_WARN(
         this->get_logger(), "Waiting for service [%s] to become available ...", service_name.c_str());
     }
-  }
-
-  void update_robot_name()
-  {
-    robot_name_ = std::string("cart_pole") + std::to_string(++counter_);
   }
 
   gz::transport::Node node_{};
