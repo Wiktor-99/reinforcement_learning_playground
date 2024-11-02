@@ -44,4 +44,13 @@ def generate_launch_description():
         output="screen",
     )
 
-    return LaunchDescription([gazebo, gazebo_spawn_robot, robot_state_publisher, gz_bridge, simulation_control])
+    simulation_observation = Node(
+        package="cart_pole_observation",
+        executable="cart_pole_observation_node",
+        parameters=[{"use_sim_time": True}],
+        output="screen",
+    )
+
+    return LaunchDescription(
+        [gazebo, gazebo_spawn_robot, robot_state_publisher, gz_bridge, simulation_control, simulation_observation]
+    )
