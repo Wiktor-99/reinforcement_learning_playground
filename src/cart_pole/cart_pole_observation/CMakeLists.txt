@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(cart_pole_observation_interface REQUIRED)
 
 add_executable(cart_pole_observation_node src/cart_pole_observation_node.cpp)
 target_include_directories(cart_pole_observation_node PUBLIC
@@ -19,6 +20,7 @@ ament_target_dependencies(
   cart_pole_observation_node
   "rclcpp"
   "sensor_msgs"
+  "cart_pole_observation_interface"
 )
 
 install(TARGETS cart_pole_observation_node
