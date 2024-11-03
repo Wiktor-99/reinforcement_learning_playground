@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from cart_pole_observation_interface.msg import CartPoleObservation
+from std_msgs.msg import Float64
 import numpy as np
 
 UPPER_POLE_LIMIT = 1.4
@@ -13,6 +14,7 @@ class CartPoleReinforcementLearning(Node):
         self.observation_subscriber = self.create_subscription(
             CartPoleObservation, "observations", self.store_observation, 10
         )
+        self.effort_command_publisher = self.create_publisher(Float64, "effort_cmd", 10)
         self.cart_observations = [0.0, 0.0, 0.0, 0.0]
         self.is_truncated = False
 
