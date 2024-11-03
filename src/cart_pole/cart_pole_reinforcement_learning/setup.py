@@ -4,7 +4,7 @@ package_name = "cart_pole_reinforcement_learning"
 
 setup(
     name=package_name,
-    version="0.0.0",
+    version="1.0.0",
     packages=find_packages(exclude=["test"]),
     data_files=[
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
@@ -18,6 +18,6 @@ setup(
     license="Apache-2.0",
     tests_require=["pytest"],
     entry_points={
-        "console_scripts": ["cart_pole_learing_node = cart_pole_reinforcement_learning.cart_pole_learing_node:main"],
+        "console_scripts": ["cart_pole_learning_node = cart_pole_reinforcement_learning.cart_pole_learning_node:main"],
     },
 )
