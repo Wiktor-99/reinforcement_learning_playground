@@ -23,6 +23,7 @@ class CartPoleReinforcementLearning(Node):
         self.cart_observations[1] = cart_pole_observation.cart_velocity
         self.cart_observations[2] = cart_pole_observation.pole_angle
         self.cart_observations[3] = cart_pole_observation.pole_angular_velocity
+        self.update_simulation_status()
 
     def update_simulation_status(self):
         self.is_truncated = np.isclose(
