@@ -18,6 +18,8 @@ setup(
     license="Apache-2.0",
     tests_require=["pytest"],
     entry_points={
-        "console_scripts": ["cart_pole_learning_node = cart_pole_reinforcement_learning.cart_pole_learning_node:main"],
+        "console_scripts": [
+            "cart_pole_basic_policy_node = cart_pole_reinforcement_learning.cart_pole_basic_policy_node:main"
+        ],
     },
 )
