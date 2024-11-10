@@ -13,11 +13,13 @@ class CartPoleReinforcementBasicPolicy:
         self.MAX_ITERATION = 150
         self.MAX_EPISODE_PER_UPDATE = 10
         self.MAX_EFFORT_COMMAND = 5.0
-        self.TIME_BETWEEN_COMMANDS = 0.001
+        self.TIME_BETWEEN_COMMANDS = 0.02
         self.learning_control_node = CartPoleReinforcementLearning("cart_pole_neural_network_node")
         self.model = tf.keras.Sequential(
             [
-                tf.keras.layers.Dense(10, activation="relu"),
+                tf.keras.layers.Dense(15, activation="elu"),
+                tf.keras.layers.Dense(20, activation="elu"),
+                tf.keras.layers.Dense(10, activation="elu"),
                 tf.keras.layers.Dense(1, activation="sigmoid"),
             ]
         )
