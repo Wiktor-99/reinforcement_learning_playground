@@ -3,3 +3,4 @@ install/
 log/
 .vscode/
 notes.md
+__pycache__/
