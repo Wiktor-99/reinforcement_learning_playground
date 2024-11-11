@@ -27,6 +27,7 @@ class CartPoleReinforcementLearning(Node):
         self.update_simulation_status()
 
     def get_cart_observations(self):
+        rclpy.spin_once(self)
         return self.cart_observations
 
     def is_simulation_stopped(self):
