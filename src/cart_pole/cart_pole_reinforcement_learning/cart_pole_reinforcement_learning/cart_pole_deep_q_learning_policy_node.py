@@ -30,6 +30,9 @@ class CartPoleReinforcementDeepQLearningPolicy:
         self.optimizer = tf.keras.optimizers.Nadam(learning_rate=1e-2)
         self.loss_fn = tf.keras.losses.mse
 
+    def is_episode_ended(self):
+        return self.step == self.MAX_STEPS
+
     def create_command(self, action):
         return Float64(data=self.MAX_EFFORT_COMMAND) if action == 0 else Float64(data=-self.MAX_EFFORT_COMMAND)
 
@@ -43,20 +46,22 @@ class CartPoleReinforcementDeepQLearningPolicy:
     def sample_experiences(self):
         indices = np.random.randint(len(self.replay_buffer), size=self.batch_size)
         batch = [self.replay_buffer[index] for index in indices]
-        return [np.array([experience[field_index] for experience in batch]) for field_index in range(5)]
+        return [np.array([experience[field_index] for experience in batch]) for field_index in range(6)]
 
     def play_one_step(self, epsilon):
         state = np.array(copy.deepcopy(self.learning_control_node.get_cart_observations()))
         action = self.epsilon_greedy_policy(epsilon, state)
         self.learning_control_node.take_action(self.create_command(action))
         next_state = np.array(copy.deepcopy(self.learning_control_node.get_cart_observations()))
-        self.replay_buffer.append((state, action, 1, next_state, self.learning_control_node.is_simulation_stopped()))
+        self.replay_buffer.append(
+            (state, action, 1, next_state, self.is_episode_ended(), self.learning_control_node.is_simulation_stopped())
+        )
 
     def training_step(self):
-        states, actions, rewards, next_states, truncateds = self.sample_experiences()
+        states, actions, rewards, next_states, dones, truncateds = self.sample_experiences()
         next_Q_values = self.model.predict(next_states, verbose=0)
         max_next_Q_values = next_Q_values.max(axis=1)
-        runs = 1.0 - truncateds
+        runs = 1.0 - (dones | truncateds)
         target_Q_values = rewards + runs * self.discount_factor * max_next_Q_values
         target_Q_values = target_Q_values.reshape(-1, 1)
         mask = tf.one_hot(actions, self.n_outputs)
@@ -71,11 +76,13 @@ class CartPoleReinforcementDeepQLearningPolicy:
     def run(self):
         for episode in range(self.MAX_EPISODES):
             reward = 0
+            self.step = 0
             for _ in range(self.MAX_STEPS):
+                self.step += 1
                 epsilon = max(1 - episode / self.MAX_EPISODES, 0.01)
                 self.play_one_step(epsilon)
                 reward += 1
-                if self.learning_control_node.is_simulation_stopped():
+                if self.learning_control_node.is_simulation_stopped() or self.is_episode_ended():
                     break
 
             if episode > 50:
