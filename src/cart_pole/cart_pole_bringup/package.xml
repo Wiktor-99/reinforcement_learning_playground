@@ -7,6 +7,8 @@
   <maintainer email="wiktorbajor1@gmail.com">Wiktor Bajor</maintainer>
   <license>Apache 2.0</license>
 
+  <author email="delicat.kuba@gmail.com">Jakub Delicat</author>
+
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <test_depend>ament_lint_auto</test_depend>
