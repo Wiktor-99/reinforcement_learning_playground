@@ -56,5 +56,3 @@ The model was applied to control the cart pole in the script `linear_approximati
 source install/setup.bash
 ros2 run cart_pole_model_based_controller linear_approximation_control_node
 ```
-
-
