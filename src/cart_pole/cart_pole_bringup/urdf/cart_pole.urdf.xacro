@@ -5,25 +5,25 @@
   <link name="world" />
   <link name="slide_bar">
     <visual>
-      <origin xyz="0 0 1" />
+      <origin xyz="0 0 0" />
       <geometry>
-        <box size="10 0.05 0.05" />
+        <mesh filename="package://cart_pole_bringup/meshes/slide_bar.dae"  />
       </geometry>
     </visual>
     <collision>
-      <origin xyz="0 0 1" />
+      <origin xyz="0 0 0" />
       <geometry>
         <box size="10 0.05 0.05" />
       </geometry>
     </collision>
-    <xacro:box_inertia m="1" w="10" h="0.05" d="0.05"  xyz="0 0 1" />
+    <xacro:box_inertia m="10" w="2" h="0.05" d="0.05"  xyz="0 0 0" rpy="0 0 ${pi/2.0}" />
   </link>
 
   <link name="cart">
     <visual>
       <origin xyz="0 0 0" />
       <geometry>
-        <box size="0.5 0.5 0.2" />
+        <mesh filename="package://cart_pole_bringup/meshes/cart.dae" />
       </geometry>
     </visual>
     <collision>
@@ -32,67 +32,62 @@
         <box size="0.5 0.5 0.2" />
       </geometry>
     </collision>
-    <xacro:box_inertia m="0.4" w="0.5" h="0.5" d="0.2" />
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.006"/>
+      <!-- TODO: @delipl wrong inertia here -->
+      <inertia 
+          ixx="0.000199325" ixy="2.051e-06"     ixz="-7.69e-06" 
+                            iyy="0.002043291"  iyz="-1.714e-06" 
+                                              izz="0.002188884" 
+      />
+
+    </inertial>
   </link>
 
-  <link name="pole_holder">
+  <link name="pole_with_holder">
     <visual>
-      <origin xyz="0 0 0" rpy="1.57 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <cylinder radius="0.05" length="0.05" />
+        <mesh filename="package://cart_pole_bringup/meshes/pole_with_holder.dae"  />
       </geometry>
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="1.57 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
         <cylinder radius="0.05" length="0.05" />
       </geometry>
     </collision>
-    <xacro:cylinder_inertia m="0.001" r="0.05" h="0.05" rpy="1.57 0 0" />
+    <inertial>
+      <origin xyz="0.04 0.435057 0" rpy="0 0 0"/>
+      <mass value="0.455"/>
+      <inertia ixx="0.044100482" ixy="-0.000237859" ixz="-0.000004"
+                                 iyy="0.000040196"  iyz="-0.000037" 
+                                                    izz="0.044096759" />
+
+    </inertial>
   </link>
 
-  <joint name="pole_holder_base_to_pole_holder" type="revolute">
-    <axis xyz="0 1 0" />
-    <origin xyz="0 0.28 0.05" rpy="0 0 0" />
+  <joint name="slide_to_pole_with_holder" type="revolute">
+    <axis xyz="1 0 0" />
+    <origin xyz="0.10161 0 0" rpy="${pi/2} 0 0" />
     <parent link="cart" />
-    <child link="pole_holder" />
+    <child link="pole_with_holder" />
     <limit effort="10000" lower="-1.4" upper="1.4" velocity="1000" />
   </joint>
 
-  <link name="pole">
-    <visual>
-      <origin xyz="0 0 0" />
-      <geometry>
-        <cylinder radius="0.05" length="0.75" />
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0" />
-      <geometry>
-        <cylinder radius="0.05" length="0.75" />
-      </geometry>
-    </collision>
-    <xacro:cylinder_inertia m="0.002" r="0.05" h="0.75" />
-  </link>
-
-  <joint name="pole_holder_to_pole" type="fixed">
-    <origin xyz="0 0.075 0.35" />
-    <parent link="pole_holder" />
-    <child link="pole" />
-  </joint>
-
   <joint name="world_to_base" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 1" />
+    <origin rpy="0 0 ${pi}" xyz="0 0 1" />
     <parent link="world" />
     <child link="slide_bar" />
   </joint>
 
   <joint name="slider_to_cart" type="prismatic">
-    <axis xyz="1 0 0" />
-    <origin xyz="0 0 1.15" />
+    <axis xyz="0 -1 0" />
+    <origin xyz="0.09 ${0.435057 - 0.435057} 0.004" />
     <parent link="slide_bar" />
     <child link="cart" />
-    <limit effort="10000" lower="-5" upper="5" velocity="1000" />
+    <limit effort="10000" lower="${-0.133 - 0.435057}" upper="${1.21 - 0.435057}" velocity="1000" />
     <dynamics damping="0.05" />
   </joint>
 
@@ -105,6 +100,17 @@
       </material>
     </visual>
   </gazebo>
+
+  <gazebo reference="pole_with_holder">
+    <visual>
+      <material>
+        <ambient>0.8 0 0 1</ambient>
+        <diffuse>0.8 0 0 1</diffuse>
+        <specular>0.8 0 0 1</specular>
+      </material>
+    </visual>
+  </gazebo>
+
   <gazebo>
     <plugin filename="gz-sim-joint-controller-system" name="gz::sim::systems::JointController">
       <joint_name>slider_to_cart</joint_name>
@@ -114,7 +120,7 @@
     <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
       <topic>joint_states</topic>
       <joint_name>slider_to_cart</joint_name>
-      <joint_name>pole_holder_base_to_pole_holder</joint_name>
+      <joint_name>slide_to_pole_with_holder</joint_name>
     </plugin>
   </gazebo>
 </robot>
