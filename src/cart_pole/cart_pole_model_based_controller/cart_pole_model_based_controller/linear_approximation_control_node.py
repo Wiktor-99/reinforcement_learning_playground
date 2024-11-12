@@ -31,8 +31,8 @@ class LinearApproximationControlNode(Node):
         # Given system matrices (A, B)
         A = self.get_A(l, m, M, Ip)
         B = self.get_B(l, m, M, Ip)
-        self.K = ctrl.place(A, B, [-1, -2, -3, -4])  # Place the poles of the system
-        self.C = np.array([0, 1, 0, 1])
+        self.K = ctrl.place(A, B, [-3, -1, -4, -2])  # Place the poles of the system
+        self.C = np.array([1, 1, 1, 1])
 
         self.timer = self.create_timer(0.1, self.update)
 
