@@ -21,6 +21,7 @@ setup(
         "console_scripts": [
             "cart_pole_basic_policy_node = cart_pole_reinforcement_learning.cart_pole_basic_policy_node:main",
             "cart_pole_neural_network_policy_node = cart_pole_reinforcement_learning.cart_pole_neural_network_policy:main",
+            "cart_pole_deep_q_learning_policy_node = cart_pole_reinforcement_learning.cart_pole_deep_q_learning_policy_node:main",
         ],
     },
 )
