@@ -50,3 +50,7 @@ class CartPoleReinforcementLearning(Node):
             self.get_logger().info("restart_sim_service not available, waiting again...")
         future = self.simulation_reset_service_client.call_async(Empty.Request())
         rclpy.spin_until_future_complete(self, future)
+
+    def restart_learning_loop(self):
+        self.restart_simulation()
+        self.reset_observation()
