@@ -7,8 +7,9 @@ import copy
 import numpy as np
 
 
-class CartPoleReinforcementNeuralNetworkPolicy:
+class CartPoleReinforcementNeuralNetworkPolicy(CartPoleReinforcementLearning):
     def __init__(self):
+        super().__init__("cart_pole_neural_network_node")
         self.MAX_STEPS_IN_EPISODE = 500
         self.MAX_ITERATION = 10
         self.MAX_EPISODE_PER_UPDATE = 10
@@ -16,7 +17,6 @@ class CartPoleReinforcementNeuralNetworkPolicy:
         self.step = 0
         self.episode = 0
         self.iteration = 0
-        self.learning_control_node = CartPoleReinforcementLearning("cart_pole_neural_network_node")
         self.loss_fn = tf.keras.losses.binary_crossentropy
         self.optimizer = tf.keras.optimizers.Nadam(learning_rate=0.01)
         self.discount_factor = 0.97
@@ -32,13 +32,13 @@ class CartPoleReinforcementNeuralNetworkPolicy:
                 tf.keras.layers.Dense(1, activation="sigmoid"),
             ]
         )
-        self.learning_control_node.create_timer(0.01, self.run)
+        self.create_timer(0.01, self.run)
 
     def create_command(self, action):
         return Float64(data=self.MAX_EFFORT_COMMAND) if action == 0 else Float64(data=-self.MAX_EFFORT_COMMAND)
 
     def run_one_step(self):
-        observations = np.array(copy.deepcopy(self.learning_control_node.get_cart_observations()))
+        observations = np.array(copy.deepcopy(self.get_cart_observations()))
         with tf.GradientTape() as tape:
             left_proba = self.model(observations[np.newaxis])
             action = tf.random.uniform([1, 1]) > left_proba
@@ -47,7 +47,7 @@ class CartPoleReinforcementNeuralNetworkPolicy:
 
         self.gradients.append(tape.gradient(loss, self.model.trainable_variables))
         self.rewards.append(1.0)
-        self.learning_control_node.take_action(self.create_command(int(action)))
+        self.take_action(self.create_command(int(action)))
         self.step += 1
 
     def discount_rewards(self, rewards):
@@ -70,20 +70,20 @@ class CartPoleReinforcementNeuralNetworkPolicy:
         return self.step == self.MAX_STEPS_IN_EPISODE
 
     def run(self):
-        if not self.learning_control_node.is_simulation_ready():
+        if not self.is_simulation_ready():
             return
 
         if self.iteration == self.MAX_ITERATION:
             quit()
 
-        if self.is_episode_ended() or self.learning_control_node.is_simulation_stopped():
+        if self.is_episode_ended() or self.is_simulation_stopped():
             self.episode_rewards.append(self.rewards)
             self.episode_gradients.append(self.gradients)
             self.rewards = []
             self.gradients = []
             self.episode += 1
-            self.learning_control_node.get_logger().info(f"Ended episode: {self.episode} with score: {self.step}")
-            self.learning_control_node.restart_learning_loop()
+            self.get_logger().info(f"Ended episode: {self.episode} with score: {self.step}")
+            self.restart_learning_loop()
             self.step = 0
 
         if self.is_iteration_ended():
@@ -91,7 +91,7 @@ class CartPoleReinforcementNeuralNetworkPolicy:
             all_final_rewards = self.discount_and_normalize_rewards()
             all_mean_grads = self.calculate_mean_grads(all_final_rewards)
             self.optimizer.apply_gradients(zip(all_mean_grads, self.model.trainable_variables))
-            self.learning_control_node.get_logger().info(
+            self.get_logger().info(
                 f"Ended {self.iteration} iteration with max final {max([sum(rewards) for rewards in self.episode_rewards])}"
             )
             self.episode_gradients = []
@@ -117,8 +117,7 @@ class CartPoleReinforcementNeuralNetworkPolicy:
 
 def main(args=None):
     rclpy.init(args=args)
-    cart_pole_reinforcement_learning = CartPoleReinforcementNeuralNetworkPolicy()
-    rclpy.spin(cart_pole_reinforcement_learning.learning_control_node)
+    rclpy.spin(CartPoleReinforcementNeuralNetworkPolicy())
     rclpy.shutdown()
 
 
