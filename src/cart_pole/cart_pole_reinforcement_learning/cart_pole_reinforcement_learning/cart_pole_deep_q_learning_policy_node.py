@@ -10,9 +10,8 @@ from collections import deque
 class CartPoleReinforcementDeepQLearningPolicy:
     def __init__(self):
         self.MAX_EPISODES = 600
-        self.MAX_STEPS = 500
+        self.MAX_STEPS = 300
         self.MAX_EFFORT_COMMAND = 5.0
-        self.TIME_BETWEEN_COMMANDS = 0.02
         self.BATCH_SIZE = 32
         self.NUMBER_OF_OUTPUTS = 2
         self.DISCOUNT_FACTOR = 0.95
@@ -20,6 +19,8 @@ class CartPoleReinforcementDeepQLearningPolicy:
         self.REWARD = 1
         self.NUMBER_OF_EPISODES_BEFORE_LEARNING = 50
 
+        self.episode = 0
+        self.steps = 0
         self.learning_control_node = CartPoleReinforcementLearning("cart_pole_deep_q_learning_policy_node")
         self.model = tf.keras.Sequential(
             [
@@ -33,6 +34,7 @@ class CartPoleReinforcementDeepQLearningPolicy:
         self.replay_buffer = deque(maxlen=2000)
         self.optimizer = tf.keras.optimizers.Nadam(learning_rate=1e-3)
         self.loss_fn = tf.keras.losses.mse
+        self.learning_control_node.create_timer(0.05, self.run)
 
     def is_episode_ended(self):
         return self.steps == self.MAX_STEPS
@@ -94,29 +96,34 @@ class CartPoleReinforcementDeepQLearningPolicy:
         target_q_values = target_q_values.reshape(-1, 1)
         return target_q_values
 
-    def learn_neural_network(self, episode):
-        if episode > self.NUMBER_OF_EPISODES_BEFORE_LEARNING:
+    def learn_neural_network(self):
+        if self.episode > self.NUMBER_OF_EPISODES_BEFORE_LEARNING:
             self.training_step()
 
     def run(self):
-        for episode in range(self.MAX_EPISODES):
-            self.steps = 0
-            self.play_one_episode(episode)
-            self.learn_neural_network(episode)
-            self.learning_control_node.restart_learning_loop()
-            self.learning_control_node.get_logger().info(f"Ended episode: {episode} with score: {self.steps}")
+        if self.episode == self.MAX_EPISODES:
+            quit()
 
-    def play_one_episode(self, episode):
-        for _ in range(self.MAX_STEPS):
-            self.play_one_step(epsilon=max(1 - episode / self.MAX_EPISODES, 0.01))
-            if self.learning_control_node.is_simulation_stopped() or self.is_episode_ended():
-                break
+        if not self.learning_control_node.is_simulation_ready():
+            return
+
+        if self.is_episode_ended() or self.learning_control_node.is_simulation_stopped():
+            self.learning_control_node.get_logger().info(f"Ended episode: {self.episode} with score: {self.steps}")
+            self.episode += 1
+            self.steps = 0
+            self.learning_control_node.restart_learning_loop()
+
+        self.run_single_episode()
+
+    def run_single_episode(self):
+        self.play_one_step(epsilon=max(1 - self.episode / self.MAX_EPISODES, 0.01))
+        self.learn_neural_network()
 
 
 def main(args=None):
     rclpy.init(args=args)
     cart_pole_reinforcement_learning = CartPoleReinforcementDeepQLearningPolicy()
-    cart_pole_reinforcement_learning.run()
+    rclpy.spin(cart_pole_reinforcement_learning.learning_control_node)
     rclpy.shutdown()
 
 
