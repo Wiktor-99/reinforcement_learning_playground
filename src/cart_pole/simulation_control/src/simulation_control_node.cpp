@@ -49,6 +49,8 @@ public:
         execute_gazebo_request(build_remove_request(), service_remove_);
         robot_name_ = std::string("cart_pole") + std::to_string(++counter_);
         execute_gazebo_request(build_create_request(), service_create_);
+        rclcpp::sleep_for(
+          std::chrono::milliseconds(500));  // Spawning model is unpredictable so arbitrary delay is used
       });
   }
 

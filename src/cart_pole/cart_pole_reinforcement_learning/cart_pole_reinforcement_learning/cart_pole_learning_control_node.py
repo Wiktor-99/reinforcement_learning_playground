@@ -20,6 +20,7 @@ class CartPoleReinforcementLearning(Node):
         self.is_truncated = False
         self.UPPER_POLE_LIMIT = 1.4
         self.LOWER_POLE_LIMIT = -1.4
+        self.restarting_future = None
 
     def store_observation(self, cart_pole_observation: CartPoleObservation):
         self.cart_observations[0] = cart_pole_observation.cart_position
@@ -57,11 +58,18 @@ class CartPoleReinforcementLearning(Node):
         )
 
     def restart_simulation(self):
-        while not self.simulation_reset_service_client.wait_for_service(
-            timeout_sec=1.0
-        ):
-            self.get_logger().info(
-                "restart_sim_service not available, waiting again..."
-            )
-        future = self.simulation_reset_service_client.call_async(Empty.Request())
-        rclpy.spin_until_future_complete(self, future)
+        while not self.simulation_reset_service_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info("restart_sim_service not available, waiting again...")
+        self.restarting_future = self.simulation_reset_service_client.call_async(Empty.Request())
+
+    def is_simulation_ready(self):
+        if self.restarting_future is None:
+            return True
+        try:
+            return self.restarting_future.done()
+        except:
+            return False
+
+    def restart_learning_loop(self):
+        self.restart_simulation()
+        self.reset_observation()
