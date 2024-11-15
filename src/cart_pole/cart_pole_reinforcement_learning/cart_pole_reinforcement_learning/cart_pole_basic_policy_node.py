@@ -1,45 +1,22 @@
 import rclpy
-from std_msgs.msg import Float64
-from cart_pole_reinforcement_learning.cart_pole_learning_control_node import CartPoleReinforcementLearning
+from cart_pole_reinforcement_learning.reinforcement_learning_node import ReinforcementLearningNode
 
 
-class CartPoleReinforcementBasicPolicy(CartPoleReinforcementLearning):
+class CartPoleReinforcementBasicPolicy(ReinforcementLearningNode):
     def __init__(self):
         super().__init__("cart_pole_basic_policy_node")
-        self.MAX_STEPS_IN_EPISODE = 500
-        self.MAX_EPISODES = 100
-        self.MAX_EFFORT_COMMAND = 5.0
-        self.episode = 0
-        self.steps = 0
         self.create_timer(0.05, self.run)
 
-    def create_action(self):
-        return (
-            Float64(data=self.MAX_EFFORT_COMMAND)
-            if self.get_cart_observations()[2] > 0
-            else Float64(data=-self.MAX_EFFORT_COMMAND)
-        )
-
     def run_one_step(self):
-        self.take_action(self.create_action())
+        self.take_action(self.create_command(int(self.get_cart_observations()[2] < 0)))
         self.steps += 1
 
-    def is_episode_ended(self):
-        return self.steps == self.MAX_STEPS_IN_EPISODE
-
     def run(self):
-        if self.episode == self.MAX_EPISODES:
-            quit()
-
         if not self.is_simulation_ready():
             return
 
-        if self.is_episode_ended() or self.is_simulation_stopped():
-            self.get_logger().info(f"Ended episode: {self.episode} with score: {self.steps}")
-            self.episode += 1
-            self.steps = 0
-            self.restart_learning_loop()
-
+        self.stop_run_when_learning_ended()
+        self.advance_episode_when_finished()
         self.run_one_step()
 
 

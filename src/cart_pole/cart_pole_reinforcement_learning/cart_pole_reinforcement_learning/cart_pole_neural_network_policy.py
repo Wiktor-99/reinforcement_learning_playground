@@ -1,30 +1,30 @@
 import rclpy
-import time
-from std_msgs.msg import Float64
-from cart_pole_reinforcement_learning.cart_pole_learning_control_node import CartPoleReinforcementLearning
+from cart_pole_reinforcement_learning.reinforcement_learning_node import ReinforcementLearningNode
 import tensorflow as tf
 import copy
 import numpy as np
 
 
-class CartPoleReinforcementNeuralNetworkPolicy(CartPoleReinforcementLearning):
+class CartPoleReinforcementNeuralNetworkPolicy(ReinforcementLearningNode):
     def __init__(self):
-        super().__init__("cart_pole_neural_network_node")
-        self.MAX_STEPS_IN_EPISODE = 500
-        self.MAX_ITERATION = 10
-        self.MAX_EPISODE_PER_UPDATE = 10
-        self.MAX_EFFORT_COMMAND = 5.0
-        self.step = 0
-        self.episode = 0
+        super().__init__(
+            name="cart_pole_neural_network_node",
+            optimizer=tf.keras.optimizers.Nadam(learning_rate=1e-3),
+            loss_function=tf.keras.losses.binary_crossentropy,
+            model=self.create_model(),
+        )
+
         self.iteration = 0
-        self.loss_fn = tf.keras.losses.binary_crossentropy
-        self.optimizer = tf.keras.optimizers.Nadam(learning_rate=0.01)
-        self.discount_factor = 0.97
+        self.max_number_of_iterations = 100
+        self.max_number_of_episodes_per_iteration = 20
         self.rewards = []
         self.gradients = []
         self.episode_rewards = []
         self.episode_gradients = []
-        self.model = tf.keras.Sequential(
+        self.create_timer(0.05, self.run)
+
+    def create_model(self):
+        return tf.keras.Sequential(
             [
                 tf.keras.layers.Dense(15, activation="elu"),
                 tf.keras.layers.Dense(20, activation="elu"),
@@ -32,10 +32,6 @@ class CartPoleReinforcementNeuralNetworkPolicy(CartPoleReinforcementLearning):
                 tf.keras.layers.Dense(1, activation="sigmoid"),
             ]
         )
-        self.create_timer(0.01, self.run)
-
-    def create_command(self, action):
-        return Float64(data=self.MAX_EFFORT_COMMAND) if action == 0 else Float64(data=-self.MAX_EFFORT_COMMAND)
 
     def run_one_step(self):
         observations = np.array(copy.deepcopy(self.get_cart_observations()))
@@ -43,12 +39,12 @@ class CartPoleReinforcementNeuralNetworkPolicy(CartPoleReinforcementLearning):
             left_proba = self.model(observations[np.newaxis])
             action = tf.random.uniform([1, 1]) > left_proba
             y_target = tf.constant([[1.0]]) - tf.cast(action, tf.float32)
-            loss = tf.reduce_mean(self.loss_fn(y_target, left_proba))
+            loss = tf.reduce_mean(self.loss_function(y_target, left_proba))
 
         self.gradients.append(tape.gradient(loss, self.model.trainable_variables))
         self.rewards.append(1.0)
         self.take_action(self.create_command(int(action)))
-        self.step += 1
+        self.step += self.reward
 
     def discount_rewards(self, rewards):
         discounted = np.array(rewards)
@@ -64,41 +60,39 @@ class CartPoleReinforcementNeuralNetworkPolicy(CartPoleReinforcementLearning):
         return [(discounted_rewards - reward_mean) / reward_std for discounted_rewards in all_discounted_rewards]
 
     def is_iteration_ended(self):
-        return self.episode == self.MAX_EPISODE_PER_UPDATE
+        return self.episode == self.max_number_of_episodes_per_iteration
 
-    def is_episode_ended(self):
-        return self.step == self.MAX_STEPS_IN_EPISODE
+    def clean_up_at_end_of_episode(self):
+        self.episode_rewards.append(self.rewards)
+        self.episode_gradients.append(self.gradients)
+        self.rewards = []
+        self.gradients = []
 
     def run(self):
         if not self.is_simulation_ready():
             return
-
-        if self.iteration == self.MAX_ITERATION:
+        elif self.iteration == self.max_number_of_iterations:
             quit()
 
-        if self.is_episode_ended() or self.is_simulation_stopped():
-            self.episode_rewards.append(self.rewards)
-            self.episode_gradients.append(self.gradients)
-            self.rewards = []
-            self.gradients = []
-            self.episode += 1
-            self.get_logger().info(f"Ended episode: {self.episode} with score: {self.step}")
-            self.restart_learning_loop()
-            self.step = 0
+        self.advance_episode_when_finished(self.clean_up_at_end_of_episode)
+        self.advance_iteration_when_finished()
+        self.run_one_step()
 
+    def advance_iteration_when_finished(self):
         if self.is_iteration_ended():
-            self.iteration += 1
-            all_final_rewards = self.discount_and_normalize_rewards()
-            all_mean_grads = self.calculate_mean_grads(all_final_rewards)
-            self.optimizer.apply_gradients(zip(all_mean_grads, self.model.trainable_variables))
             self.get_logger().info(
                 f"Ended {self.iteration} iteration with max final {max([sum(rewards) for rewards in self.episode_rewards])}"
             )
+            self.apply_gradients()
             self.episode_gradients = []
             self.episode_rewards = []
             self.episode = 0
+            self.iteration += 1
 
-        self.run_one_step()
+    def apply_gradients(self):
+        all_final_rewards = self.discount_and_normalize_rewards()
+        all_mean_grads = self.calculate_mean_grads(all_final_rewards)
+        self.optimizer.apply_gradients(zip(all_mean_grads, self.model.trainable_variables))
 
     def calculate_mean_grads(self, all_final_rewards):
         all_mean_grads = []
