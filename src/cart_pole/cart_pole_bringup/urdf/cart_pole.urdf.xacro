@@ -27,9 +27,9 @@
       </geometry>
     </visual>
     <collision>
-      <origin xyz="0.015 0 0" />
+      <origin xyz="0.04 0 0" />
       <geometry>
-        <box size="0.16 0.16 0.11" />
+        <box size="0.1 0.16 0.11" />
       </geometry>
     </collision>
 
@@ -58,7 +58,7 @@
       <origin xyz="0.039298 0.435057 0" rpy="0 0 0"/>
       <mass value="0.455"/>
       <inertia ixx="0.044100482" ixy="-0.000237859" ixz="-0.000004"
-                                 iyy="0.000040196"  iyz="-0.000037" 
+                                 iyy="0.000040196"  iyz="-0.000037"
                                                     izz="0.044096759" />
 
     </inertial>
