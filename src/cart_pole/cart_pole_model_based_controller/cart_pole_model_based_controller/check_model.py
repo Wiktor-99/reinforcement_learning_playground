@@ -52,7 +52,6 @@ def main():
     x = np.array([0.5, 0.1, 0, 0.1])
 
     print(f"State: {x}")
-    state = A_cl * x
     print(f"C: {C}")
     print(f"KC: {K*C}")
     y = np.dot(K * C, x)
@@ -64,14 +63,11 @@ def main():
     t = np.linspace(0, 50, num=200)
 
     u = np.ones_like(t)
-    tout, y, x = lsim(system, u, t)
+    _, y, x = lsim(system, u, t)
 
     plt.plot(t, y)
-
     plt.grid(alpha=0.3)
-
     plt.xlabel("t")
-
     plt.show()
 
 

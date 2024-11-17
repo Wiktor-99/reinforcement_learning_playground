@@ -1,7 +1,7 @@
 import sympy as sp
 from sympy import *
 from sympy import init_printing
-import numpy as np
+
 
 def main():
     t = sp.Symbol("t")  # time
@@ -10,7 +10,6 @@ def main():
     x2 = sp.Function("x2")(t)  # angle of the pendulum
     x3 = sp.Function("x3")(t)  # velocity of the cart
     x4 = sp.Function("x4")(t)  # angular velocity of the pendulum
-
 
     # x3 = sp.diff(x1(t), t) # velocity of the cart
     # x4 = sp.diff(x2(t), t) # angular velocity of the pendulum
@@ -88,11 +87,7 @@ def main():
 
     print(f"dL_dx = {dL_dx}")
 
-    E_Le = (
-        simplify(dL_ddx_dt - dL_dx)
-        .subs(sp.Derivative(x1, t), x3)
-        .subs(sp.Derivative(x2, t), x4)
-    )
+    E_Le = simplify(dL_ddx_dt - dL_dx).subs(sp.Derivative(x1, t), x3).subs(sp.Derivative(x2, t), x4)
     init_printing()
     print(f"\n\nE_Le = ")
     pprint(E_Le)
@@ -113,7 +108,6 @@ def main():
     dq1_coeff = Matrix([QCD[0].coeff(x3**2), QCD[1].coeff(x3**2)])
     dq2_coeff = Matrix([QCD[0].coeff(x4**2), QCD[1].coeff(x4**2)])
 
-
     ddq = Matrix([x3.diff(t), x4.diff(t)])
     dq = Matrix([[x3], [x4]])
     q = Matrix([x1, x2])
@@ -123,15 +117,12 @@ def main():
     print(f"C = ")
     pprint(C)
 
-
     Dq = (QCD - Q * ddq - C * dq).simplify()
 
     print(f"Dq = ")
     pprint(Dq)
 
-
     q_dot = Matrix([[x3], [x4]])
-
 
     uF = sp.Symbol("uF")  # force applied to the cart
     u = Matrix([[uF], [0]])
@@ -159,6 +150,5 @@ def main():
     print(f"B = {sp.pycode(B)}")
 
 
-    
 if __name__ == "__main__":
     main()
