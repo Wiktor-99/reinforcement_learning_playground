@@ -8,8 +8,8 @@ class CartPoleReinforcementBasicPolicy(ReinforcementLearningNode):
         self.create_timer(0.05, self.run)
 
     def run_one_step(self):
-        self.take_action(self.create_command(int(self.get_cart_observations()[2] < 0)))
-        self.steps += 1
+        self.take_action(self.create_command(int(self.get_cart_observations()[1] < 0)))
+        self.step += 1
 
     def run(self):
         if not self.is_simulation_ready():
