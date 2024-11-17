@@ -2,7 +2,7 @@ import rclpy
 from cart_pole_reinforcement_learning.cart_pole_learning_control_node import CartPoleReinforcementLearning
 from std_msgs.msg import Float64
 import numpy as np
-import control as ctrl
+import control
 
 
 class LinearApproximationControlNode(CartPoleReinforcementLearning):
@@ -15,7 +15,7 @@ class LinearApproximationControlNode(CartPoleReinforcementLearning):
 
         state_matrix = self.get_state_matrix()
         input_matrix = self.get_input_matrix()
-        self.controller = ctrl.place(state_matrix, input_matrix, [-3, -1, -4, -2])
+        self.controller = control.place(state_matrix, input_matrix, [-3, -1, -4, -2])
         self.states_used_in_control_loop = np.array([1, 1, 1, 1])
         self.timer = self.create_timer(0.1, self.run)
 
