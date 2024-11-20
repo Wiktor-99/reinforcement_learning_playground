@@ -21,7 +21,7 @@ RUN sudo wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrin
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install tensorflow control sympy scipy ipykernel --break-system-packages
+RUN python3 -m pip install tensorflow control sympy scipy ipykernel nbconvert==7.16.1 nbformat --break-system-packages
 ENV DEBIAN_FRONTEND=dialog
 
 ARG WORKSPACE
