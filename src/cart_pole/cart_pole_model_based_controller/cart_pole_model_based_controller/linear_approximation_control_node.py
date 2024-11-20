@@ -27,13 +27,13 @@ class LinearApproximationControlNode(CartPoleReinforcementLearning):
                 [0, 0, 0, 1],
                 [
                     0,
-                    g
+                    -g
                     * self.length_to_pendulums_center_mass**2
                     * self.pendulum_mass_kg**2
                     / (
-                        -self.pole_inertia * self.cart_mass_kg
-                        - self.pole_inertia * self.pendulum_mass_kg
-                        - self.cart_mass_kg * self.length_to_pendulums_center_mass**2 * self.pendulum_mass_kg
+                        self.pole_inertia * self.cart_mass_kg
+                        + self.pole_inertia * self.pendulum_mass_kg
+                        + self.cart_mass_kg * self.length_to_pendulums_center_mass**2 * self.pendulum_mass_kg
                     ),
                     0,
                     0,
@@ -43,11 +43,11 @@ class LinearApproximationControlNode(CartPoleReinforcementLearning):
                     g
                     * self.length_to_pendulums_center_mass
                     * self.pendulum_mass_kg
-                    * (-self.cart_mass_kg - self.pendulum_mass_kg)
+                    * (self.cart_mass_kg + self.pendulum_mass_kg)
                     / (
-                        -self.pole_inertia * self.cart_mass_kg
-                        - self.pole_inertia * self.pendulum_mass_kg
-                        - self.cart_mass_kg * self.length_to_pendulums_center_mass**2 * self.pendulum_mass_kg
+                        self.pole_inertia * self.cart_mass_kg
+                        + self.pole_inertia * self.pendulum_mass_kg
+                        + self.cart_mass_kg * self.length_to_pendulums_center_mass**2 * self.pendulum_mass_kg
                     ),
                     0,
                     0,
