@@ -23,7 +23,7 @@ repos:
           description: Checks for common misspellings in text files.
           language: python
           types: [text]
-          args: ["--skip=*.ipynb"]
+          args: ["--skip=*.ipynb", "-L Arent, ARENT"]
 
   - repo: https://github.com/psf/black
     rev: 24.4.2

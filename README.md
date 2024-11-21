@@ -18,9 +18,9 @@ The model of the cart pole was initially created and analyzed in publication:
             booktitle = "Postępy robotyki"
             year = "2018"
             pages = "365-376"
-        } 
+        }
 
-The cart pole is located in [The Laboratory of Robotics](https://lr.kcir.pwr.edu.pl/) on [Wrocaław University of Science and Technology](https://pwr.edu.pl/).  
+The cart pole is located in [The Laboratory of Robotics](https://lr.kcir.pwr.edu.pl/) on [Wrocaław University of Science and Technology](https://pwr.edu.pl/).
 
 
 
@@ -36,19 +36,7 @@ ros2 launch cart_pole_bringup cart_pole.launch.py
 
 ### Linear approximation in an unstable equilibrium point
 
-A model of an inverted pendulum on a cart is derived by script `dynamics.py`.
-
-```bash
-source install/setup.bash
-ros2 run cart_pole_model_based_controller dynamics 
-```
-
-Linear approximation was checked by script `check_model.py` where the initial angle is 0.1rad.
-
-```bash
-source install/setup.bash
-ros2 run cart_pole_model_based_controller check_model 
-```
+A model of an inverted pendulum on a cart and controller are derived in the `cart_pole_system.ipynb`.
 
 The model was applied to control the cart pole in the script `linear_approximation_control_node.py`.
 
