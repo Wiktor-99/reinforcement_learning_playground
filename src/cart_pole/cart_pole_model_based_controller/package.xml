@@ -2,18 +2,23 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>cart_pole_model_based_controller</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>Cart pole dynamic model based controller</description>
   <maintainer email="delicat.kuba@gmail.com">Jakub Delicat</maintainer>
+  <author email="wiktorbajor1@gmail.com">Wiktor Bajor</author>
+
   <license>Apache-2.0</license>
 
-  <depend>std_msgs</depend>
-  <depend>cart_pole_observation_interface</depend>
-  <depend>std_srvs</depend>
-
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>cart_pole_observation_interface</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>python-control-pip</exec_depend>
+  <exec_depend>python-scipy</exec_depend>
+  <exec_depend>python-sympy</exec_depend>
+  <exec_depend>jupyter-nbconvert</exec_depend>
+  <exec_depend>ipython3</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>
   </export>
 </package>
-<!-- This package was generated using the Turtle Nest ROS 2 package creator -->
