@@ -1,4 +1,3 @@
-import rclpy
 from rclpy.node import Node
 from cart_pole_observation_interface.msg import CartPoleObservation
 from std_msgs.msg import Float64
@@ -12,9 +11,7 @@ class CartPoleReinforcementLearning(Node):
         self.observation_subscriber = self.create_subscription(
             CartPoleObservation, "observations", self.store_observation, 10
         )
-        self.simulation_reset_service_client = self.create_client(
-            Empty, "restart_sim_service"
-        )
+        self.simulation_reset_service_client = self.create_client(Empty, "restart_sim_service")
         self.effort_command_publisher = self.create_publisher(Float64, "effort_cmd", 10)
         self.cart_observations = [0.0, 0.0, 0.0, 0.0]
         self.is_truncated = False
