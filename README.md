@@ -44,3 +44,34 @@ The model was applied to control the cart pole in the script `linear_approximati
 source install/setup.bash
 ros2 run cart_pole_model_based_controller linear_approximation_control_node
 ```
+
+### Reinforcement learning nodes
+
+Repository currently contains three reinforcement learning policies:
+* Basic policy
+* Neural network policy
+* Deep q learning policy
+
+All implementations are based on the implementations presented in the `Hands-On Machine Learning with Scikit-Learn, Keras, and Tensorflow: Concepts, Tools, and Techniques to Build Intelligent`
+
+### Launching
+To run simulations use command given above and in other terminal use one of following command:
+
+```bash
+source install/setup.bash
+ros2 run cart_pole_reinforcement_learning cart_pole_basic_policy_node
+```
+
+or
+
+```bash
+source install/setup.bash
+ros2 run cart_pole_reinforcement_learning cart_pole_neural_network_policy
+```
+
+or
+
+```bash
+source install/setup.bash
+ros2 run cart_pole_reinforcement_learning cart_pole_deep_q_learning_policy_node
+```
