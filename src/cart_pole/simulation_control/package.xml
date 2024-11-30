@@ -3,7 +3,7 @@
 <package format="3">
   <name>simulation_control</name>
   <version>1.0.0</version>
-  <description>Package enbales controling simulation via ros2 serivce interface.</description>
+  <description>Package enables controlling simulation via ros2 service interface.</description>
   <maintainer email="wiktorbajor1@gmail.com">Wiktor Bajor</maintainer>
   <license>Apache-2.0</license>
 

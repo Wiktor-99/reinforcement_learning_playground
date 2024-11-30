@@ -14,7 +14,7 @@ setup(
     zip_safe=True,
     maintainer="Wiktor Bajor",
     maintainer_email="wiktorbajor1@gmail.com",
-    description="Package that controller reinforcement learning loop.",
+    description="Reinforcement node and simple algorithms.",
     license="Apache-2.0",
     tests_require=["pytest"],
     entry_points={

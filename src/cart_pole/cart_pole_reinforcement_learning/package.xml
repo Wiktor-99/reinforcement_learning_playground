@@ -3,7 +3,7 @@
 <package format="3">
   <name>cart_pole_reinforcement_learning</name>
   <version>1.0.0</version>
-  <description>Package that controller reinforcement learning loop.</description>
+  <description>Reinforcement node and simple algorithms.</description>
   <maintainer email="wiktorbajor1@gmail.com">Wiktor Bajor</maintainer>
   <license>Apache-2.0</license>
 
