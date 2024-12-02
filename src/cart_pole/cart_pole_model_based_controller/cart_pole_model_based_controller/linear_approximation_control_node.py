@@ -17,9 +17,9 @@ class LinearApproximationControlNode(CartPoleReinforcementLearning):
         input_matrix = self.get_input_matrix()
         self.controller = control.place(state_matrix, input_matrix, [-3, -1, -4, -2])
         self.states_used_in_control_loop = np.array([1, 1, 1, 1])
-        self.timer = self.create_timer(0.1, self.run)
+        self.timer = self.create_timer(timer_period_sec=0.1, callback=self.run)
 
-    def get_state_matrix(self):
+    def get_state_matrix(self) -> np.array:
         g = 9.81
         return np.array(
             [
@@ -55,7 +55,7 @@ class LinearApproximationControlNode(CartPoleReinforcementLearning):
             ]
         )
 
-    def get_input_matrix(self):
+    def get_input_matrix(self) -> np.array:
         return np.array(
             [
                 [0],
@@ -80,7 +80,7 @@ class LinearApproximationControlNode(CartPoleReinforcementLearning):
             ]
         )
 
-    def get_control_value(self):
+    def get_control_value(self) -> float:
         return -np.dot(self.controller * self.states_used_in_control_loop, self.get_cart_observations())[0]
 
     def run(self):
