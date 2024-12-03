@@ -26,13 +26,13 @@ class CartPoleReinforcementLearning(Node):
         self.cart_observations[3] = cart_pole_observation.pole_angular_velocity
         self.update_simulation_status()
 
-    def get_cart_observations(self):
+    def get_cart_observations(self) -> list[float]:
         return self.cart_observations
 
-    def is_simulation_stopped(self):
+    def is_simulation_stopped(self) -> bool:
         return self.is_truncated
 
-    def take_action(self, action):
+    def take_action(self, action: Float64):
         self.effort_command_publisher.publish(action)
 
     def reset_observation(self):
@@ -59,7 +59,7 @@ class CartPoleReinforcementLearning(Node):
             self.get_logger().info("restart_sim_service not available, waiting again...")
         self.restarting_future = self.simulation_reset_service_client.call_async(Empty.Request())
 
-    def is_simulation_ready(self):
+    def is_simulation_ready(self) -> bool:
         if self.restarting_future is None:
             return True
         try:
