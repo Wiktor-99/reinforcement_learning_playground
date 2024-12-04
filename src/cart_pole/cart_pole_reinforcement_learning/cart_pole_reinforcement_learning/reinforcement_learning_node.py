@@ -1,4 +1,5 @@
 from std_msgs.msg import Float64
+from collections.abc import Callable
 from cart_pole_reinforcement_learning.cart_pole_learning_control_node import CartPoleReinforcementLearning
 
 
@@ -27,17 +28,17 @@ class ReinforcementLearningNode(CartPoleReinforcementLearning):
         self.loss_function = loss_function
         self.model = model
 
-    def is_episode_ended(self):
+    def is_episode_ended(self) -> bool:
         return self.step == self.max_number_of_steps
 
-    def create_command(self, action):
+    def create_command(self, action: int) -> Float64:
         return Float64(data=self.max_effort_command) if action == 0 else Float64(data=-self.max_effort_command)
 
     def stop_run_when_learning_ended(self):
         if self.episode == self.max_number_of_episodes:
             quit()
 
-    def advance_episode_when_finished(self, clean_up_function=None):
+    def advance_episode_when_finished(self, clean_up_function: Callable[[], None] = None):
         if self.is_episode_ended() or self.is_simulation_stopped():
             self.get_logger().info(f"Ended episode: {self.episode} with score: {self.step}")
             self.episode += 1
