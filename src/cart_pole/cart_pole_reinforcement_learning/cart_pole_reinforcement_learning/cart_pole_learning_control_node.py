@@ -3,21 +3,25 @@ from cart_pole_observation_interface.msg import CartPoleObservation
 from std_msgs.msg import Float64
 import numpy as np
 from std_srvs.srv import Empty
+from rclpy.task import Future
+from rclpy.publisher import Publisher
+from rclpy.subscription import Subscription
+from rclpy.client import Client
 
 
 class CartPoleReinforcementLearning(Node):
     def __init__(self, node_name="cart_pole_learning_node"):
         super().__init__(node_name)
-        self.observation_subscriber = self.create_subscription(
+        self.observation_subscriber: Subscription = self.create_subscription(
             CartPoleObservation, "observations", self.store_observation, 10
         )
-        self.simulation_reset_service_client = self.create_client(Empty, "restart_sim_service")
-        self.effort_command_publisher = self.create_publisher(Float64, "effort_cmd", 10)
-        self.cart_observations = [0.0, 0.0, 0.0, 0.0]
-        self.is_truncated = False
-        self.UPPER_POLE_LIMIT = 1.4
-        self.LOWER_POLE_LIMIT = -1.4
-        self.restarting_future = None
+        self.simulation_reset_service_client: Client = self.create_client(Empty, "restart_sim_service")
+        self.effort_command_publisher: Publisher = self.create_publisher(Float64, "effort_cmd", 10)
+        self.cart_observations: list[float] = [0.0, 0.0, 0.0, 0.0]
+        self.is_truncated: bool = False
+        self.UPPER_POLE_LIMIT: float = 1.4
+        self.LOWER_POLE_LIMIT: float = -1.4
+        self.restarting_future: Future = None
 
     def store_observation(self, cart_pole_observation: CartPoleObservation):
         self.cart_observations[0] = cart_pole_observation.cart_position
