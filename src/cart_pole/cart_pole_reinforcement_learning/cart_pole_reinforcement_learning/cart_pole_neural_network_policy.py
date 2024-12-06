@@ -26,9 +26,10 @@ class CartPoleReinforcementNeuralNetworkPolicy(ReinforcementLearningNode):
     def create_model(self):
         return tf.keras.Sequential(
             [
-                tf.keras.layers.Dense(15, activation="elu"),
-                tf.keras.layers.Dense(20, activation="elu"),
-                tf.keras.layers.Dense(10, activation="elu"),
+                tf.keras.layers.Dense(256, activation="elu"),
+                tf.keras.layers.Dense(256, activation="elu"),
+                tf.keras.layers.Dense(256, activation="elu"),
+                tf.keras.layers.Dense(256, activation="elu"),
                 tf.keras.layers.Dense(1, activation="sigmoid"),
             ]
         )
