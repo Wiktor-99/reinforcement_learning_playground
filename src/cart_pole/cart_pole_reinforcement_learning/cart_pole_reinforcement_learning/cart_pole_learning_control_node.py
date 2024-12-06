@@ -31,7 +31,7 @@ class CartPoleReinforcementLearning(Node):
         self.update_simulation_status()
 
     def get_cart_observations(self) -> list[float]:
-        return self.cart_observations
+        return [obs for obs in self.cart_observations]
 
     def is_simulation_stopped(self) -> bool:
         return self.is_truncated

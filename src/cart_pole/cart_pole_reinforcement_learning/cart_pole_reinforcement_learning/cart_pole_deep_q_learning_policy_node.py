@@ -18,7 +18,7 @@ class CartPoleReinforcementDeepQLearningPolicy(ReinforcementLearningNode):
             loss_function=tf.keras.losses.mse,
             model=self.create_model(),
         )
-
+        self.state = self.get_cart_observations()
         self.replay_buffer = deque(maxlen=2000)
         self.create_timer(0.05, self.run)
 
@@ -49,20 +49,8 @@ class CartPoleReinforcementDeepQLearningPolicy(ReinforcementLearningNode):
         ]
 
     def run_one_step(self, epsilon):
-        state = np.array(copy.deepcopy(self.get_cart_observations()))
-        action = self.epsilon_greedy_policy(epsilon, state)
-        self.take_action(self.create_command(action))
-        next_state = np.array(copy.deepcopy(self.get_cart_observations()))
-        self.replay_buffer.append(
-            (
-                state,
-                action,
-                self.reward,
-                next_state,
-                self.is_episode_ended(),
-                self.is_simulation_stopped(),
-            )
-        )
+        self.action = self.epsilon_greedy_policy(epsilon, np.array(self.get_cart_observations()))
+        self.take_action(self.create_command(self.action))
         self.step += 1
 
     def training_step(self):
@@ -89,17 +77,29 @@ class CartPoleReinforcementDeepQLearningPolicy(ReinforcementLearningNode):
         return target_q_values
 
     def learn_neural_network(self):
-        if self.episode > self.NUMBER_OF_EPISODES_BEFORE_LEARNING:
+        if self.episode > self.NUMBER_OF_EPISODES_BEFORE_LEARNING and (
+            self.is_episode_ended() or self.is_simulation_stopped()
+        ):
             self.training_step()
 
     def run(self):
         if not self.is_simulation_ready():
             return
-
+        self.learn_neural_network()
         self.stop_run_when_learning_ended()
         self.advance_episode_when_finished()
         self.run_one_step(epsilon=max(1 - self.episode / self.max_number_of_episodes, 0.01))
-        self.learn_neural_network()
+        self.replay_buffer.append(
+            (
+                self.state,
+                self.action,
+                self.reward,
+                self.get_cart_observations(),
+                self.is_episode_ended(),
+                self.is_simulation_stopped(),
+            )
+        )
+        self.state = self.get_cart_observations()
 
 
 def main(args=None):
