@@ -89,6 +89,9 @@ class CartPoleReinforcementDeepQLearningPolicy(ReinforcementLearningNode):
         self.stop_run_when_learning_ended()
         self.advance_episode_when_finished()
         self.run_one_step(epsilon=max(1 - self.episode / self.max_number_of_episodes, 0.01))
+        self.append_data_from_last_step()
+
+    def append_data_from_last_step(self):
         self.replay_buffer.append(
             (
                 self.state,
