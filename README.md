@@ -75,3 +75,5 @@ or
 source install/setup.bash
 ros2 run cart_pole_reinforcement_learning cart_pole_deep_q_learning_policy_node
 ```
+
+DQN model works poorly for now.
