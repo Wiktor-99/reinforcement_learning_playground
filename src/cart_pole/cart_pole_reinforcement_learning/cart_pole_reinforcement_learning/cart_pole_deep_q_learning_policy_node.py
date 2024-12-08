@@ -1,7 +1,6 @@
 import rclpy
 from cart_pole_reinforcement_learning.reinforcement_learning_node import ReinforcementLearningNode
 import tensorflow as tf
-import copy
 import numpy as np
 from collections import deque
 
