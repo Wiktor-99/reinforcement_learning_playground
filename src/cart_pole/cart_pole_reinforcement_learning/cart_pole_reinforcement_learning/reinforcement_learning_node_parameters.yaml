@@ -1,0 +1,26 @@
+reinforcement_learning_node_parameters:
+  max_number_of_episodes:
+    type: int
+    default_value: 100
+    read_only: true
+    description: "Max number of episodes."
+  max_number_of_steps:
+    type: int
+    default_value: 500
+    read_only: true
+    description: "Max number of steps"
+  max_effort_command:
+    type: double
+    default_value: 5.0
+    read_only: true
+    description: "Effort command sent to cart."
+  discount_factor:
+    type: double
+    default_value: 0.95
+    read_only: true
+    description: "Discount factor."
+  reward:
+    type: int
+    default_value: 1
+    read_only: true
+    description: "Reward after each step."
