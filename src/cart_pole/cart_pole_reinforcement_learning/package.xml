@@ -7,6 +7,7 @@
   <maintainer email="wiktorbajor1@gmail.com">Wiktor Bajor</maintainer>
   <license>Apache-2.0</license>
 
+  <exec_depend>generate_parameter_library</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>python-tensorflow-pip</exec_depend>
   <exec_depend>python3-numpy</exec_depend>
