@@ -1,6 +1,11 @@
 from setuptools import find_packages, setup
+from generate_parameter_library_py.setup_helper import generate_parameter_module
 
 package_name = "cart_pole_reinforcement_learning"
+generate_parameter_module(
+    "cart_pole_reinforcement_learning_params",
+    "cart_pole_reinforcement_learning/reinforcement_learning_node_parameters.yaml",
+)
 
 setup(
     name=package_name,
