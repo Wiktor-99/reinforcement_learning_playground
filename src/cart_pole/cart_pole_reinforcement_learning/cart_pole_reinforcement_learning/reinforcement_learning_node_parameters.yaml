@@ -8,7 +8,7 @@ reinforcement_learning_node_parameters:
     type: int
     default_value: 500
     read_only: true
-    description: "Max number of steps"
+    description: "Max number of steps."
   max_effort_command:
     type: double
     default_value: 5.0
