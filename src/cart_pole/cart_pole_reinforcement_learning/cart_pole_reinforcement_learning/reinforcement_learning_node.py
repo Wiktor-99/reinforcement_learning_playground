@@ -20,28 +20,19 @@ class ReinforcementLearningNode(CartPoleReinforcementLearning):
         model=None,
     ):
         super().__init__(name)
-
+        self.param_listener = reinforcement_learning_node_parameters.ParamListener(self)
+        self.parameters = self.param_listener.get_params()
         self.max_number_of_episodes = (
-            reinforcement_learning_node_parameters.Params.max_number_of_episodes
-            if max_number_of_episodes is None
-            else max_number_of_episodes
+            self.parameters.max_number_of_episodes if max_number_of_episodes is None else max_number_of_episodes
         )
         self.max_number_of_steps = (
-            reinforcement_learning_node_parameters.Params.max_number_of_steps
-            if max_number_of_steps is None
-            else max_number_of_steps
+            self.parameters.max_number_of_steps if max_number_of_steps is None else max_number_of_steps
         )
         self.max_effort_command = (
-            reinforcement_learning_node_parameters.Params.max_effort_command
-            if max_effort_command is None
-            else max_effort_command
+            self.parameters.max_effort_command if max_effort_command is None else max_effort_command
         )
-        self.discount_factor = (
-            reinforcement_learning_node_parameters.Params.discount_factor
-            if discount_factor is None
-            else discount_factor
-        )
-        self.reward = reinforcement_learning_node_parameters.Params.reward if max_number_of_steps is None else reward
+        self.discount_factor = self.parameters.discount_factor if discount_factor is None else discount_factor
+        self.reward = self.parameters.reward if max_number_of_steps is None else reward
         self.episode = 0
         self.step = 0
         self.optimizer = optimizer
