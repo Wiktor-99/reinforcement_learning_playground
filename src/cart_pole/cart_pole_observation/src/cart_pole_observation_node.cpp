@@ -16,7 +16,7 @@ public:
     {
       const auto slider_to_cart_iter = std::find(msg->name.cbegin(), msg->name.cend(), "slider_to_cart");
       const auto pole_holder_base_to_pole_holder_iter =
-        std::find(msg->name.cbegin(), msg->name.cend(), "slide_to_pole_with_holder");
+        std::find(msg->name.cbegin(), msg->name.cend(), "slider_to_pole_with_holder");
       CartPoleObservation cart_pole_observation;
       cart_pole_observation.cart_position = msg->position[std::distance(msg->name.cbegin(), slider_to_cart_iter)];
       cart_pole_observation.cart_velocity = msg->velocity[std::distance(msg->name.cbegin(), slider_to_cart_iter)];
