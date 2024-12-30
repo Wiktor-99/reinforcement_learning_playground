@@ -64,7 +64,7 @@
     </inertial>
   </link>
 
-  <joint name="slide_to_pole_with_holder" type="revolute">
+  <joint name="slider_to_pole_with_holder" type="revolute">
     <axis xyz="1 0 0" />
     <origin xyz="0.08 0 0" rpy="${pi/2} 0 0" />
     <parent link="cart" />
@@ -116,7 +116,7 @@
     <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
       <topic>joint_states</topic>
       <joint_name>slider_to_cart</joint_name>
-      <joint_name>slide_to_pole_with_holder</joint_name>
+      <joint_name>slider_to_pole_with_holder</joint_name>
     </plugin>
   </gazebo>
 </robot>
