@@ -61,7 +61,7 @@
       <inertia ixx="0.044100482" ixy="-0.000237859" ixz="-0.000004" iyy="0.000040196" iyz="-0.000037" izz="0.044096759"/>
     </inertial>
   </link>
-  <joint name="slide_to_pole_with_holder" type="revolute">
+  <joint name="slider_to_pole_with_holder" type="revolute">
     <axis xyz="1 0 0"/>
     <origin rpy="1.5707963267948966 0 0" xyz="0.08 0 0"/>
     <parent link="cart"/>
@@ -79,7 +79,7 @@
     <parent link="slide_bar"/>
     <child link="cart"/>
     <limit effort="10000" lower="-0.568057" upper="0.7749429999999999" velocity="1000"/>
-    <!-- <dynamics damping="0.05"/> -->
+    <dynamics damping="0.05"/>
   </joint>
   <gazebo reference="cart">
     <visual>
@@ -108,7 +108,7 @@
     <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
       <topic>joint_states</topic>
       <joint_name>slider_to_cart</joint_name>
-      <joint_name>slide_to_pole_with_holder</joint_name>
+      <joint_name>slider_to_pole_with_holder</joint_name>
     </plugin>
   </gazebo>
 </robot>
