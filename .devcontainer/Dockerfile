@@ -1,5 +1,5 @@
-FROM althack/ros2:jazzy-full
 ARG ROS_DISTRO=jazzy
+FROM althack/ros2:$ROS_DISTRO-cuda-full
 ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
@@ -22,7 +22,9 @@ RUN sudo wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrin
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install tensorflow control sympy scipy ipykernel nbconvert==7.16.1 nbformat --break-system-packages torch
+RUN python3 -m pip install tensorflow==2.17.0 --break-system-packages
+RUN python3 -m pip install control sympy scipy ipykernel nbconvert==7.16.1 nbformat --break-system-packages
+RUN python3 -m pip install torch --break-system-packages
 RUN git clone https://github.com/Genesis-Embodied-AI/Genesis.git && \
     cd Genesis && pip install --break-system-packages -e .
 ENV DEBIAN_FRONTEND=dialog
