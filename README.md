@@ -77,3 +77,5 @@ ros2 run cart_pole_reinforcement_learning cart_pole_deep_q_learning_policy_node
 ```
 
 DQN model works poorly for now.
+
+Rolling branch uses cuda-image in the devcontainer, non cuda version is on the main branch.
