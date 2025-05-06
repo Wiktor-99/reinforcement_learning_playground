@@ -2,6 +2,8 @@
 
 Currently repository allows to play with cart pole model.
 
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 ### Cart pole simulation
 ![cart pole](/img/cart_pole.png " ")
 

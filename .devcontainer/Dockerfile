@@ -1,5 +1,5 @@
 ARG ROS_DISTRO=jazzy
-FROM althack/ros2:$ROS_DISTRO-cuda-full
+FROM althack/ros2:$ROS_DISTRO-full
 ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
