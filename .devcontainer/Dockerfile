@@ -25,7 +25,7 @@ RUN sudo wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrin
 RUN python3 -m pip install tensorflow==2.17.0 --break-system-packages
 RUN python3 -m pip install control sympy scipy ipykernel nbconvert==7.16.1 nbformat --break-system-packages
 RUN python3 -m pip install torch --break-system-packages
-RUN python3 -m pip install genesis-world --break-system-packages
+RUN python3 -m pip install --ignore-installed genesis-world --break-system-packages
 ENV DEBIAN_FRONTEND=dialog
 
 ARG WORKSPACE
